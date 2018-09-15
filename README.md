@@ -14,3 +14,4 @@ Example output has been provided in the form of [plot.png](https://github.com/Da
 
 ## Running  
 Requires matplotlib, and several other included libraries to run.  
+Note: you can specify the number of points by passing it as an arguement: `python qh.py 100`  
