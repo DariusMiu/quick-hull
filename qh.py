@@ -7,9 +7,18 @@ import random
 import math
 from numpy import arccos, array, dot, pi, cross
 from numpy.linalg import det, norm
+import sys
 
 filename = 'plot'
 rand = random.seed()
+
+def is_int(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+#
 
 def drawline(p1, p2, style, width) :
 	plt.plot([p1.X,p2.X],[p1.Y,p2.Y], style, linewidth=width)
@@ -97,8 +106,12 @@ p = []
 convexhull = []
 convexhulltop = []
 
-for i in range(50) :
-	p.append(Point.Point(i,random.randint(0, 20), 'y'))
+size = 50
+if len(sys.argv) > 1 and is_int(sys.argv[1]) :
+	size = int(sys.argv[1])
+
+for i in range(size) :
+	p.append(Point.Point(i,random.randint(0, size), 'y'))
 
 convexhull.append(p[0])
 convexhull.append(p[len(p)-1])
