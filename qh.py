@@ -2,12 +2,10 @@ import matplotlib
 import Point
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
-import numpy as np
 import random
 import math
-from numpy import arccos, array, dot, pi, cross
-from numpy.linalg import det, norm
 import sys
+import time
 
 filename = 'plot'
 rand = random.seed()
@@ -116,42 +114,58 @@ if len(sys.argv) > 1 and is_int(sys.argv[1]) :
 for i in range(size) :
 	points.append(Point.Point(i,random.randint(0, size), 'y'))
 
+starttime = time.time()
+
 convexhull.append(points[0])
 convexhull.append(points[len(points)-1])
 
 top = []
 bottom = []
+center = []
 
 for i in range(1,len(points) - 1) :
 	if side(points[0], points[len(points)-1], points[i]) > 0 :
 		points[i].color = 'r'
 		top.append(points[i])
-	if side(points[len(points)-1], points[0], points[i]) > 0 :
+	elif side(points[len(points)-1], points[0], points[i]) > 0 :
 		points[i].color = 'b'
 		bottom.append(points[i])
+	else : 
+		points[i].color = [0.4, 0, 1, 1]
+		center.append(points[i])
 
 drawline(convexhull[0], convexhull[1], 'g--', 0.5)
 
 print("len(points):" + str(len(points)))
-print("len(top):" + str(len(top)) + " len(bottom):" + str(len(bottom)))
-
+print("len(top):" + str(len(top)) + " len(bottom):" + str(len(bottom)), end='')
+if len(center) > 1 :
+	print(" (" + str(len(center)) + " occurrences on initial line)", end='')
+elif len(center) > 0 :
+	print(" (" + str(len(center)) + " occurrence on initial line)", end='')
+print()
 
 findhull(top, 0, len(convexhull)-1, True)
 drawloc = len(convexhull) - 1
 findhull(bottom, len(convexhull)-1, 0, False)
 
+endtime = time.time()
 
 print("len(convexhull):" + str(len(convexhull)))
+print("runtime:" + str((endtime - starttime) * 1000) + "ms")
+print("\ndrawing...")
 
-
-#for i in range(len(points)) :
-#	plt.plot(points[i].X, points[i].Y, 'yo', markersize=2)
+if size > 300 :
+	dotsize = 1
+else :
+	dotsize = 2
+for i in range(len(center)) :
+	plt.plot(center[i].X, center[i].Y, marker='o', color=center[i].color, markersize=dotsize)
 for i in range(len(top)) :
-	plt.plot(top[i].X, top[i].Y, top[i].color + 'o', markersize=2)
+	plt.plot(top[i].X, top[i].Y, marker='o', color=top[i].color, markersize=dotsize)
 for i in range(len(bottom)) :
-	plt.plot(bottom[i].X, bottom[i].Y, bottom[i].color + 'o', markersize=2)
+	plt.plot(bottom[i].X, bottom[i].Y, marker='o', color=bottom[i].color, markersize=dotsize)
 for i in range(len(convexhull)) :
-	plt.plot(convexhull[i].X, convexhull[i].Y, 'go', markersize=3)
+	plt.plot(convexhull[i].X, convexhull[i].Y, 'go', markersize=(dotsize+1))
 for i in range(drawloc - 1) :
 	drawline(convexhull[i], convexhull[i+1], 'g-', 0.5)
 drawline(convexhull[drawloc - 1], convexhull[len(convexhull) - 1], 'g-', 0.5)
