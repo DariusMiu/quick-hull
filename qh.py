@@ -65,7 +65,7 @@ def side(A, B, P) :
 	return (B.X - A.X) * (P.Y - A.Y) - (B.Y - A.Y) * (P.X - A.X)
 #
 
-def findhull(points, p, q) :
+def findhull(points, p, q, top) :
 	global convexhull
 	#convexhull[p],convexhull[q] = dividing line segment
 	if len(points) <= 0 :
@@ -97,71 +97,55 @@ def findhull(points, p, q) :
 				S1.append(points[i])
 			if side(pointc, convexhull[q], points[i]) > 0 :
 				S2.append(points[i])
-	print("p:" + str(convexhull[p]) + " q:" + str(convexhull[q]) + " c:" + str(convexhull[c]))
-	findhull(S1, p, c)
-	findhull(S2, c, q)
+	#print("p:" + str(convexhull[p]) + " q:" + str(convexhull[q]) + " c:" + str(convexhull[c]))
+	if top :
+		findhull(S2, c, q, top)
+		findhull(S1, p, c, top)
+	else :
+		findhull(S1, p, c, top)
+		findhull(S2, c, q, top)
 #
 
-p = []
+points = []
 convexhull = []
-convexhulltop = []
 
 size = 50
 if len(sys.argv) > 1 and is_int(sys.argv[1]) :
 	size = int(sys.argv[1])
 
 for i in range(size) :
-	p.append(Point.Point(i,random.randint(0, size), 'y'))
+	points.append(Point.Point(i,random.randint(0, size), 'y'))
 
-convexhull.append(p[0])
-convexhull.append(p[len(p)-1])
-convexhulltop.append(p[0])
-convexhulltop.append(p[len(p)-1])
+convexhull.append(points[0])
+convexhull.append(points[len(points)-1])
 
 top = []
 bottom = []
 
-for i in range(1,len(p) - 1) :
-	if side(p[0], p[len(p)-1], p[i]) > 0 :
-		p[i].color = 'r'
-		top.append(p[i])
-	if side(p[len(p)-1], p[0], p[i]) > 0 :
-		p[i].color = 'b'
-		bottom.append(p[i])
+for i in range(1,len(points) - 1) :
+	if side(points[0], points[len(points)-1], points[i]) > 0 :
+		points[i].color = 'r'
+		top.append(points[i])
+	if side(points[len(points)-1], points[0], points[i]) > 0 :
+		points[i].color = 'b'
+		bottom.append(points[i])
 
-drawline(convexhull[0], convexhull[1], 'g--', 1)
+drawline(convexhull[0], convexhull[1], 'g--', 0.5)
 
-print("len(p):" + str(len(p)) + " len(top+bottom):" + str(len(top) + len(bottom)))
+print("len(points):" + str(len(points)))
 print("len(top):" + str(len(top)) + " len(bottom):" + str(len(bottom)))
-print("top:")
-for i in range(len(top)) :
-	print(str(top[i]), end=' ')
-print()
-print("bottom:")
-for i in range(len(bottom)) :
-	print(str(bottom[i]), end=' ')
-print()
-print()
 
-print("initial:")
-for i in range(len(convexhull)) :
-	print(str(convexhull[i]), end=' ')
-print()
-findhull(bottom, len(convexhull)-1, 0)
-print("second half:")
-for i in range(len(convexhull)) :
-	print(str(convexhull[i]), end=' ')
-print()
+
+findhull(top, 0, len(convexhull)-1, True)
 drawloc = len(convexhull) - 1
-findhull(top, 0, len(convexhull)-1)
-print("final:")
-for i in range(len(convexhull)) :
-	print(str(convexhull[i]), end=' ')
-print()
+findhull(bottom, len(convexhull)-1, 0, False)
 
 
-#for i in range(len(p)) :
-#	plt.plot(p[i].X, p[i].Y, 'yo', markersize=2)
+print("len(convexhull):" + str(len(convexhull)))
+
+
+#for i in range(len(points)) :
+#	plt.plot(points[i].X, points[i].Y, 'yo', markersize=2)
 for i in range(len(top)) :
 	plt.plot(top[i].X, top[i].Y, top[i].color + 'o', markersize=2)
 for i in range(len(bottom)) :
