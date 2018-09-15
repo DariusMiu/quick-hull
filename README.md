@@ -11,3 +11,6 @@ I implemented the quick hull algorithm as described on [wikipedia](https://en.wi
 
 ## Example Output  
 Example output has been provided in the form of [plot.png](https://github.com/DariusMiu/quick-hull/blob/master/plot.png)  
+
+## Running  
+Requires matplotlib, and several other included libraries to run.  
