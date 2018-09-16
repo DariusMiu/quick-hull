@@ -1,3 +1,18 @@
+# Course: CS4306-01
+# Student name: Jonathan Miu
+# Student ID: 000456452
+# Programming Assignment #1
+# Due Date: September 20, 2018
+# Signature: jmiu
+# (The signature means that the program is your own work)
+# Score: ______________
+
+
+
+
+
+
+
 import matplotlib
 import Point
 matplotlib.use('agg')
@@ -23,7 +38,7 @@ def drawline(p1, p2, style, width) :
 #
 
 #https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment?page=1&tab=votes#tab-top
-def distSQR(p1, p2, p): # p is the point
+def distSQR(p1, p2, p):
     px = p2.X-p1.X
     py = p2.Y-p1.Y
 
@@ -45,7 +60,7 @@ def distSQR(p1, p2, p): # p is the point
     return dx*dx + dy*dy
 #
 
-def dist(p1, p2, p): # p is the point
+def dist(p1, p2, p):
 	return math.sqrt(distSQR(p1, p2, p))
 #
 
@@ -171,7 +186,6 @@ for i in range(drawloc - 1) :
 drawline(convexhull[drawloc - 1], convexhull[len(convexhull) - 1], 'g-', 0.5)
 for i in range(drawloc, len(convexhull) - 1) :
 	drawline(convexhull[i], convexhull[i+1], 'g-', 0.5)
-#drawline(convexhull[drawloc], convexhull[len(convexhull) - 1], 'g-', 0.5)
 drawline(convexhull[drawloc], convexhull[0], 'g-', 0.5)
 
 
